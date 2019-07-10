@@ -21,9 +21,9 @@ public class AuthenticationFilter extends GenericFilterBean {
 
     Logger LOG = LoggerFactory.getLogger(AuthenticationFilter.class);
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint unAuthenticationEntryPoint) {
         this.authenticationManager = authenticationManager;
-        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationEntryPoint = unAuthenticationEntryPoint;
     }
 
     private AuthenticationManager authenticationManager;

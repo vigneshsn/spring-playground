@@ -19,12 +19,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
 		LOG.info("security config invoked!!!");
-		httpSecurity.csrf().disable()
+		httpSecurity
+				.csrf().disable()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 				.and()
 				.authorizeRequests()
-				.antMatchers("/secured")
-				.authenticated()
+				.antMatchers("/anonymous/**").permitAll()
 				.and()
 				.addFilterBefore(
 						new AuthenticationFilter(authenticationManager(), new UnAuthenticatedEntryPoint()),
