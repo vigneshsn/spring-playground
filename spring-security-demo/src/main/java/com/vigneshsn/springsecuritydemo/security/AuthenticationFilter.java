@@ -19,7 +19,7 @@ import java.io.IOException;
 
 public class AuthenticationFilter extends GenericFilterBean {
 
-    Logger LOG = LoggerFactory.getLogger(AuthenticationFilter.class);
+    Logger log = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     public AuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint unAuthenticationEntryPoint) {
         this.authenticationManager = authenticationManager;
@@ -31,11 +31,14 @@ public class AuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        LOG.info("filter invoked!!!");
+        log.info("filter invoked!!!");
         try {
             HttpServletRequest request = (HttpServletRequest) servletRequest;
             String token = request.getHeader("auth-token");
-            PreAuthenticatedAuthenticationToken preAuthToken = new PreAuthenticatedAuthenticationToken(token, null);
+            String tokenSetByLoginFilter = (String) request.getAttribute("auth-token");
+            String authToken = tokenSetByLoginFilter == null ? token: tokenSetByLoginFilter;
+            log.info("token {} , {}", token, tokenSetByLoginFilter );
+            PreAuthenticatedAuthenticationToken preAuthToken = new PreAuthenticatedAuthenticationToken(authToken, null);
             Authentication responseAuthentication = authenticationManager.authenticate(preAuthToken);
             SecurityContextHolder.getContext().setAuthentication(responseAuthentication);
             filterChain.doFilter(servletRequest, servletResponse);
